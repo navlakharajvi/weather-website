@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <style>
+    
+        body {
+            color: #333333;
+            font-family: arial;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 0 16px;
+
+            display: flex;
+            flex-direction: column;
+            min-height: 99vh;
+        }
+
+        .main-content {
+            flex-grow: 1;
+        }
+
+        footer{
+           color: #888888;
+           border-top: 1px solid #eeeeee;
+           margin-top: 16px;
+           padding: 16px 0;
+        }
+
+        header{
+            margin-top: 16px;
+            margin-bottom: 48px;
+        }
+
+        h1{
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        header a {
+            color: #888888;
+            margin-right: 16px;
+            text-decoration: none;
+        }
+
+        .portrait {
+            width: 250px;
+        }
+
+        input{
+            border: 1px solid #cccccc;
+            padding: 8px;
+        }
+
+        button {
+            cursor: pointer;
+            border: 1px solid #888888;
+             background: #888888;
+             color: white;
+            padding: 8px;
+
+        }
+
+    </style>
+    <title>Weather</title>
+      
+
+
+</head>
+<body>
+    <link rel="icon" href="/webserver/src/public/img/weather.png">
+    <div class="main-content">
+        {{>header}}
+        <p>Use this site to get your weather!</p>
+
+        <form>
+            <input placeholder="Location">
+            <button>Search</button>
+        </form>
+
+        <p id="message-one"></p>
+        <p id="message-two"></p>
+        
+    </div>
+    
+    {{>footer}}
+
+        <script>
+        console.log('Cliend side javascrpit file is loaded!')
+       
+
+    const weatherFrom = document.querySelector('form')
+    const searchElement = document.querySelector('input')
+    const messegeOne = document.querySelector('#message-one')
+    const messageTwo = document.querySelector('#message-two')
+    
+    weatherFrom.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        const location = searchElement.value
+
+            messegeOne.textContent = 'Loading...'
+            messageTwo.textContent = ''
+            
+
+         fetch('http://localhost:3000/weather?address='+location).then((response) => {
+        response.json().then((data) => {
+            if(data.error) {
+                messegeOne.textContent = data.error
+            }
+            else {
+                messegeOne.textContent = data.location
+                messageTwo.textContent += '\n'+data.forecast
+                }
+            
+            })
+           
+        })
+        })
+    </script>
+</body>
+</html>  
